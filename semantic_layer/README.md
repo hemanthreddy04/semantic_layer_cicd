@@ -1,15 +1,29 @@
-Welcome to your new dbt project!
+# semantic_layer
 
-### Using the starter project
+dbt project (Databricks) that exposes customer metrics through the dbt Semantic Layer.
 
-Try running the following commands:
-- dbt run
-- dbt test
+## Lineage
 
+`sample_ci_cd.gold.dim_customers` / `fact_customer_metrics`
+→ `stg_customers` / `stg_customer_metrics` (views)
+→ `customer_360` (one row per customer)
+→ `customer_kpis`, `customer_semantic_check`, and the `customer` semantic model
 
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+`time_spine` is the daily spine MetricFlow needs for time-based queries.
+
+## Metrics
+
+`total_customers`, `active_customers`, `inactive_customers`, `valid_email_customers`,
+`total_lifetime_value`, `avg_lifetime_value`, `max_lifetime_value`, `min_lifetime_value`,
+`active_customer_pct`, `valid_email_pct` (ratios are 0-1 fractions).
+
+Dimensions: `signup_date` (time), `customer_segment`, `status`, `city`, `state`, `country`, `is_email_valid`.
+
+## Running
+
+Run commands from this `semantic_layer/` directory with a `semantic_layer` profile in `~/.dbt/profiles.yml`:
+
+```
+dbt build                                   # models + tests
+mf query --metrics total_customers --group-by customer__status
+```
