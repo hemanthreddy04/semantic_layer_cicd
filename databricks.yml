@@ -7,6 +7,7 @@ variables:
 
 resources:
   jobs:
+
     semantic_layer_job:
       name: semantic_layer_job_${bundle.target}
 
@@ -34,6 +35,23 @@ resources:
             dependencies:
               - dbt-core
               - dbt-databricks
+
+    final_pipeline_job:
+      name: final_pipeline_job_${bundle.target}
+
+      tasks:
+        - task_key: ETL_Pipeline
+
+          run_job_task:
+            job_id: 674614659267116
+
+        - task_key: semantic_layer
+
+          depends_on:
+            - task_key: ETL_Pipeline
+
+          run_job_task:
+            job_id: 584825634549538
 
 targets:
   dev:
