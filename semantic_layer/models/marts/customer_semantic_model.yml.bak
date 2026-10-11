@@ -1,0 +1,32 @@
+semantic_models:
+  - name: customer
+
+    description: Customer semantic model
+
+    model: ref('customer_360')
+
+    entities:
+      - name: customer
+        type: primary
+        expr: customer_id
+
+    dimensions:
+      - name: signup_date
+        type: time
+        type_params:
+          time_granularity: day
+
+      - name: customer_segment
+        type: categorical
+
+      - name: status
+        type: categorical
+
+      - name: city
+        type: categorical
+
+      - name: state
+        type: categorical
+
+      - name: country
+        type: categorical
