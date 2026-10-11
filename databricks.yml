@@ -13,8 +13,14 @@ resources:
             project_directory: ./semantic_layer
 
             commands:
+              - dbt deps
               - dbt run
               - dbt test
+
+
+            catalog: sample_ci_cd
+
+            schema: gold
 
           environment_key: default
 
