@@ -4,7 +4,7 @@ bundle:
 resources:
   jobs:
     semantic_layer_job:
-      name: semantic_layer_job
+      name: semantic_layer_job_${bundle.target}
 
       tasks:
         - task_key: dbt_run
