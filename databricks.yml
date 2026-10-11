@@ -22,6 +22,9 @@ resources:
         - environment_key: default
           spec:
             client: "6"
+            dependencies:
+              - dbt-core
+              - dbt-databricks
 
 targets:
   dev:
