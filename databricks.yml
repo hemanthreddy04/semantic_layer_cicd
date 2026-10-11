@@ -16,6 +16,13 @@ resources:
               - dbt run
               - dbt test
 
+          environment_key: default
+
+      environments:
+        - environment_key: default
+          spec:
+            client: "6"
+
 targets:
   dev:
     mode: development
