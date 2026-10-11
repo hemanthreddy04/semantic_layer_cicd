@@ -1,0 +1,13 @@
+select
+    customer_id,
+    first_name,
+    last_name,
+    email,
+    phone,
+    city,
+    state,
+    country,
+    signup_date,
+    customer_segment,
+    status
+from {{ source('gold', 'dim_customers') }}
