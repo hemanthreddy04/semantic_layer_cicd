@@ -1,0 +1,138 @@
+semantic_models:
+  - name: customer
+    description: Customer semantic model built on customer_360 (one row per customer).
+    model: ref('customer_360')
+
+    defaults:
+      agg_time_dimension: signup_date
+
+    entities:
+      - name: customer
+        type: primary
+        expr: customer_id
+
+    dimensions:
+      - name: signup_date
+        type: time
+        type_params:
+          time_granularity: day
+
+      - name: customer_segment
+        type: categorical
+
+      - name: status
+        type: categorical
+
+      - name: city
+        type: categorical
+
+      - name: state
+        type: categorical
+
+      - name: country
+        type: categorical
+
+      - name: is_email_valid
+        type: categorical
+
+    measures:
+      - name: customer_count
+        description: Distinct customers.
+        agg: count_distinct
+        expr: customer_id
+
+      - name: active_customer_count
+        description: Distinct customers with status Active.
+        agg: count_distinct
+        expr: case when status = 'Active' then customer_id end
+
+      - name: inactive_customer_count
+        description: Distinct customers with status Inactive.
+        agg: count_distinct
+        expr: case when status = 'Inactive' then customer_id end
+
+      - name: valid_email_customer_count
+        description: Distinct customers with a valid email.
+        agg: count_distinct
+        expr: case when is_email_valid = true then customer_id end
+
+      - name: lifetime_value_sum
+        agg: sum
+        expr: lifetime_value
+
+      - name: lifetime_value_avg
+        agg: average
+        expr: lifetime_value
+
+      - name: lifetime_value_max
+        agg: max
+        expr: lifetime_value
+
+      - name: lifetime_value_min
+        agg: min
+        expr: lifetime_value
+
+metrics:
+  - name: total_customers
+    label: Total customers
+    type: simple
+    type_params:
+      measure: customer_count
+
+  - name: active_customers
+    label: Active customers
+    type: simple
+    type_params:
+      measure: active_customer_count
+
+  - name: inactive_customers
+    label: Inactive customers
+    type: simple
+    type_params:
+      measure: inactive_customer_count
+
+  - name: valid_email_customers
+    label: Customers with valid email
+    type: simple
+    type_params:
+      measure: valid_email_customer_count
+
+  - name: total_lifetime_value
+    label: Total lifetime value
+    type: simple
+    type_params:
+      measure: lifetime_value_sum
+
+  - name: avg_lifetime_value
+    label: Average lifetime value
+    type: simple
+    type_params:
+      measure: lifetime_value_avg
+
+  - name: max_lifetime_value
+    label: Max lifetime value
+    type: simple
+    type_params:
+      measure: lifetime_value_max
+
+  - name: min_lifetime_value
+    label: Min lifetime value
+    type: simple
+    type_params:
+      measure: lifetime_value_min
+
+  - name: active_customer_pct
+    label: Active customer share
+    description: Share of customers that are Active, as a 0-1 fraction.
+    type: ratio
+    type_params:
+      numerator: active_customers
+      denominator: total_customers
+
+  - name: valid_email_pct
+    label: Valid email share
+    description: Share of customers with a valid email, as a 0-1 fraction.
+    type: ratio
+    type_params:
+      numerator: valid_email_customers
+      denominator: total_customers

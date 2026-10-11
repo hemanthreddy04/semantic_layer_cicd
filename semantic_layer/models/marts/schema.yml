@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: customer_360
+    description: One row per customer with attributes and lifetime metrics.
+    columns:
+      - name: customer_id
+        data_tests:
+          - unique
+          - not_null
+      - name: status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Active', 'Inactive']
+              config:
+                severity: warn
+
+  - name: customer_kpis
+    description: Single-row customer KPI summary.
+
+  - name: customer_semantic_check
+    description: Customer counts and lifetime value by segment and status, for reconciling semantic layer results.

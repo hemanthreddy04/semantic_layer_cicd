@@ -1,6 +1,6 @@
 select
 
-    count(*) as total_customers,
+    count(distinct customer_id) as total_customers,
 
     sum(lifetime_value) as total_lifetime_value,
 
@@ -10,31 +10,20 @@ select
 
     min(lifetime_value) as min_lifetime_value,
 
-    sum(
-        case
-            when status = 'Active' then 1
-            else 0
-        end
-    ) as active_customers,
+    count(distinct case when status = 'Active' then customer_id end) as active_customers,
 
-    sum(
-        case
-            when status = 'Inactive' then 1
-            else 0
-        end
-    ) as inactive_customers,
+    count(distinct case when status = 'Inactive' then customer_id end) as inactive_customers,
 
+    -- nullif avoids a divide-by-zero error under ANSI mode when there are no customers
     round(
-        (
-            sum(case when status = 'Active' then 1 else 0 end) * 100.0
-        ) / count(*),
+        count(distinct case when status = 'Active' then customer_id end) * 100.0
+        / nullif(count(distinct customer_id), 0),
         2
     ) as active_customer_pct,
 
     round(
-        (
-            sum(case when is_email_valid = true then 1 else 0 end) * 100.0
-        ) / count(*),
+        count(distinct case when is_email_valid = true then customer_id end) * 100.0
+        / nullif(count(distinct customer_id), 0),
         2
     ) as valid_email_pct,
 
