@@ -1,6 +1,10 @@
 bundle:
   name: semantic_layer
 
+variables:
+  warehouse_id:
+    default: b3b9e852940178a2
+
 resources:
   jobs:
     semantic_layer_job:
@@ -17,7 +21,7 @@ resources:
               - dbt run
               - dbt test
 
-            warehouse_id: b3b9e852940178a2
+            warehouse_id: ${var.warehouse_id}
             catalog: sample_ci_cd
             schema: gold
 
@@ -35,8 +39,14 @@ targets:
   dev:
     mode: development
 
+    variables:
+      warehouse_id: b3b9e852940178a2
+
   prod:
     mode: production
+
+    variables:
+      warehouse_id: bb4fd8deddacb8cb
 
     workspace:
       host: https://dbc-fa8c4e91-54a4.cloud.databricks.com
