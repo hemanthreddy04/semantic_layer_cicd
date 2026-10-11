@@ -43,7 +43,7 @@ resources:
         - task_key: ETL_Pipeline
 
           run_job_task:
-            job_id: 674614659267116
+            job_id: 186537758596128
 
         - task_key: semantic_layer
 
@@ -51,7 +51,7 @@ resources:
             - task_key: ETL_Pipeline
 
           run_job_task:
-            job_id: 584825634549538
+            job_id: 703192002767875
 
 targets:
   dev:
